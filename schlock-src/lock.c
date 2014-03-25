@@ -1,4 +1,8 @@
 #include "lock.h"
+#include "../common/xutils.h"
+
+const int win_width = 400;
+const int win_height = 100;
 
 t_lock win_create()
 {
@@ -7,17 +11,22 @@ t_lock win_create()
     int screen;
     XEvent evt;
     int white, black;
+    int screen_width, screen_height;
 
     lock.display = XOpenDisplay(NULL);
     screen = DefaultScreen(lock.display);
+    win_screen_res(&screen_width, &screen_height, lock.display);
+
     root_win = RootWindow(lock.display, screen);
     white = WhitePixel(lock.display, screen);
     black = BlackPixel(lock.display, screen);
-    lock.win = XCreateSimpleWindow(lock.display, root_win, 0, 0, 400, 100, 0,
-            black, black);
+    lock.win = XCreateSimpleWindow(lock.display, root_win,
+            (screen_width - win_width) / 2,
+            (screen_height - win_height) / 2,
+            win_width, win_height, 0, black, black);
     XSelectInput(lock.display, lock.win, StructureNotifyMask);
     XMapWindow(lock.display, lock.win);
-    XStoreName(lock.display, lock.win, "schischi_lock");
+    XStoreName(lock.display, lock.win, "schlock");
     lock.gc = XCreateGC(lock.display, lock.win, 0, NULL);
     XSetForeground(lock.display, lock.gc, white);
     while (evt.type != MapNotify)
