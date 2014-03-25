@@ -15,10 +15,12 @@ struct s_lock {
     Display *display;
     Window win;
     GC gc;
+    char *msg;
+    size_t msg_len;
 };
 struct s_lock typedef t_lock;
 
-t_lock win_create();
+t_lock win_create(char *msg);
 char win_getc(t_lock lock, t_buf *buf);
 void win_str(t_lock lock, t_buf *buf);
 

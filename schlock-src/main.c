@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 {
     if (cred_init())
         return EXIT_FAILURE;
-    t_lock lock = win_create();
+    t_lock lock = win_create("This screen is locked by schischi");
     buf = buf_create(255);
     while (win_getc(lock, buf)) {
         win_str(lock, buf);

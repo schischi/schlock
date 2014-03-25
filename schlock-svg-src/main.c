@@ -19,7 +19,7 @@
 #define SCHLOCK_PATH "/home/schischi/dev/schlock/schlock"
 #define SVG_PATH "hmm.svg"
 
-static char* const zlock[] = {SCHLOCK_PATH, "schlock", NULL};
+static char* const schlock[] = {SCHLOCK_PATH, "schlock", NULL};
 
 int main(int argc, const char* argv[])
 {
@@ -39,10 +39,12 @@ int main(int argc, const char* argv[])
         fatal("Can't open display\n");
 
     win_screen_res(&wWidth, &wHeight, dpy);
-    width = 640;
-    height = 480;
+    RsvgDimensionData dim;
+    rsvg_handle_get_dimensions (rsvg_handle, &dim);
+    width = dim.width;
+    height = dim.height;
 
-    w = XCreateSimpleWindow(dpy, RootWindow(dpy, 0),
+    w = XCreateSimpleWindow(dpy, RootWindow(dpy, DefaultScreen(dpy)),
             (wWidth - width) / 2 - 112, (wHeight - height) / 2 + 96,
             width, height, 0, 0, BlackPixel(dpy, 0));
     XSetWindowAttributes winattr;
@@ -66,7 +68,7 @@ int main(int argc, const char* argv[])
     } while((pid == -1) && (errno == EAGAIN));
 
     if(!pid)
-        execv(zlock[0], zlock + 1);
+        execv(schlock[0], schlock + 1);
 
     do {
         XEvent e;

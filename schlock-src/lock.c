@@ -4,7 +4,7 @@
 const int win_width = 400;
 const int win_height = 100;
 
-t_lock win_create()
+t_lock win_create(char *msg)
 {
     t_lock lock;
     Window root_win;
@@ -20,15 +20,26 @@ t_lock win_create()
     root_win = RootWindow(lock.display, screen);
     white = WhitePixel(lock.display, screen);
     black = BlackPixel(lock.display, screen);
+
+    XColor color;
+    Colormap colormap;
+    char green[] = "#9FB6CD";
+
+    colormap = DefaultColormap(lock.display, 0);
+    XParseColor(lock.display, colormap, green, &color);
+    XAllocColor(lock.display, colormap, &color);
+
     lock.win = XCreateSimpleWindow(lock.display, root_win,
             (screen_width - win_width) / 2,
             (screen_height - win_height) / 2,
-            win_width, win_height, 0, black, black);
+            win_width, win_height, 0, white, color.pixel);
     XSelectInput(lock.display, lock.win, StructureNotifyMask);
     XMapWindow(lock.display, lock.win);
     XStoreName(lock.display, lock.win, "schlock");
     lock.gc = XCreateGC(lock.display, lock.win, 0, NULL);
-    XSetForeground(lock.display, lock.gc, white);
+    //Font font = XLoadFont(lock.display, "10x14");
+    //XSetFont(lock.display, lock.gc, font);
+    XSetForeground(lock.display, lock.gc, black);
     while (evt.type != MapNotify)
         XNextEvent(lock.display, &evt);
     XFlush(lock.display);
@@ -38,6 +49,9 @@ t_lock win_create()
             | PointerMotionMask, GrabModeSync, GrabModeAsync, lock.win, None,
             CurrentTime);
     XGrabKeyboard(lock.display, lock.win, True, GrabModeAsync, GrabModeAsync, CurrentTime);
+
+    lock.msg = msg;
+    lock.msg_len = strlen(msg);
     return lock;
 }
 
@@ -78,7 +92,8 @@ void win_str(t_lock lock, t_buf *buf)
     for (int i = 0; i < buf->i; ++i)
         h->buf[(h->i)++] = '#';
     XClearWindow(lock.display, lock.win);
-    XDrawString(lock.display, lock.win, lock.gc, 10, 10, h->buf, h->i);
+    XDrawString(lock.display, lock.win, lock.gc, 10, 20, lock.msg, lock.msg_len);
+    XDrawString(lock.display, lock.win, lock.gc, 10, 30, h->buf, h->i);
     XFlush(lock.display);
     buf_delete(h);
 }
