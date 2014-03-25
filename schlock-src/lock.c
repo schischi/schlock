@@ -85,16 +85,25 @@ char win_getc(t_lock lock, t_buf *buf)
     return 1;
 }
 
+static char rand_char()
+{
+    return rand() % 92 + 33;
+}
+
 void win_str(t_lock lock, t_buf *buf)
 {
-    t_buf *h = buf_create(buf->max);
+    static t_buf *h = NULL;
+    if (h == NULL)
+        h = buf_create(buf->max);
 
-    for (int i = 0; i < buf->i; ++i)
-        h->buf[(h->i)++] = '#';
+    if (buf->i == 0)
+        h->i = 0;
+    if (buf->i - h->i == 1)
+        h->buf[h->i] = rand_char();
+    h->i = buf->i;
     XClearWindow(lock.display, lock.win);
     XDrawString(lock.display, lock.win, lock.gc, 10, 20, lock.msg, lock.msg_len);
     XDrawString(lock.display, lock.win, lock.gc, 10, 30, h->buf, h->i);
     XFlush(lock.display);
-    buf_delete(h);
 }
 

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #include "cred.h"
 #include "buf.h"
@@ -11,6 +12,7 @@ t_buf *buf = NULL;
 
 int main(int argc, char *argv[])
 {
+    srand(time(NULL));
     if (cred_init())
         return EXIT_FAILURE;
     t_lock lock = win_create("This screen is locked by schischi");
