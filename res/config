@@ -1,0 +1,13 @@
+hmm =
+{
+    svg = "res/hmm.svg";
+    x = 112;
+    y = 96;
+};
+
+hmm_rage =
+{
+    svg = "res/hmm_rage.svg"
+    x = 200;
+    y = 220;
+};

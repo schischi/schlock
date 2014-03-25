@@ -12,6 +12,7 @@
 #include <librsvg-2.0/librsvg/rsvg.h>
 
 #include "../common/xutils.h"
+#include "config.h"
 
 #define LOOP_SLEEP 20
 #define fatal(x) \
@@ -21,7 +22,7 @@
 
 static char* const schlock[] = {SCHLOCK_PATH, "schlock", NULL};
 
-int main(int argc, const char* argv[])
+int main(int argc, char* argv[])
 {
     Window w;
     pid_t pid;
@@ -32,7 +33,9 @@ int main(int argc, const char* argv[])
     RsvgHandle *rsvg_handle;
     int width, height, wWidth, wHeight;
 
-    if(!(rsvg_handle = rsvg_handle_new_from_file(SVG_PATH, NULL)))
+    t_config *conf = config_load(argc, argv);
+
+    if(!(rsvg_handle = rsvg_handle_new_from_file(conf->svg, NULL)))
         fatal("Unable to load svg\n");
 
     if(!(dpy = XOpenDisplay(NULL)))
@@ -45,7 +48,7 @@ int main(int argc, const char* argv[])
     height = dim.height;
 
     w = XCreateSimpleWindow(dpy, RootWindow(dpy, DefaultScreen(dpy)),
-            (wWidth - width) / 2 - 112, (wHeight - height) / 2 + 96,
+            (wWidth - width) / 2 - conf->x, (wHeight - height) / 2 + conf->y,
             width, height, 0, 0, BlackPixel(dpy, 0));
     XSetWindowAttributes winattr;
     winattr.override_redirect = 1;
