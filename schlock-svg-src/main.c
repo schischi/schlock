@@ -50,6 +50,7 @@ int main(int argc, char* argv[])
     w = XCreateSimpleWindow(dpy, RootWindow(dpy, DefaultScreen(dpy)),
             (wWidth - width) / 2 - conf->x, (wHeight - height) / 2 + conf->y,
             width, height, 0, 0, BlackPixel(dpy, 0));
+    config_delete(conf);
     XSetWindowAttributes winattr;
     winattr.override_redirect = 1;
     XChangeWindowAttributes(dpy, w, CWOverrideRedirect, &winattr);

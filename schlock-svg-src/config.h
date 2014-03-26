@@ -10,5 +10,6 @@ struct s_config {
 struct s_config typedef t_config;
 
 t_config *config_load(int argc, char *argv[]);
+void config_delete(t_config *conf);
 
 #endif /* !CONFIG_H */

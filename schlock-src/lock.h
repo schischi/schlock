@@ -1,9 +1,12 @@
 #ifndef LOCK_H
 # define LOCK_H
 
+#define _GNU_SOURCE
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/time.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/keysym.h>
@@ -17,6 +20,7 @@ struct s_lock {
     GC gc;
     char *msg;
     size_t msg_len;
+    struct timeval started;
 };
 struct s_lock typedef t_lock;
 

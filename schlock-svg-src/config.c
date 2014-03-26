@@ -48,3 +48,9 @@ t_config *config_load(int argc, char *argv[])
 
     return conf;
 }
+
+void config_delete(t_config *conf)
+{
+    free(conf->svg);
+    free(conf);
+}

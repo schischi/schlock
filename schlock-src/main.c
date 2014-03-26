@@ -17,10 +17,11 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     t_lock lock = win_create("This screen is locked by schischi");
     buf = buf_create(255);
-    while (win_getc(lock, buf)) {
-        win_str(lock, buf);
-        continue;
-    }
+    int ret = 1;
+    do {
+        if (ret == 1)
+            win_str(lock, buf);
+    } while ((ret = win_getc(lock, buf)));
     if (cred_check(buf->buf, buf->i)) {
         printf("Nop\n");
     }
