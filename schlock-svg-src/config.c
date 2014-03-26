@@ -22,14 +22,15 @@ t_config *config_load(int argc, char *argv[])
                 shape = optarg;
                 break;
             default:
-                return NULL;
+                ; //return NULL;
         }
     }
 
     config_init(&cfg);
-    if (!config_read_file(&cfg, "/usr/share/schlock/config")) {
-        return NULL;
-    }
+    if (!config_read_file(&cfg, "/usr/share/schlock/config"))
+        if (!config_read_file(&cfg, "config"))
+            if (!config_read_file(&cfg, "~/.schlock/config"))
+                return NULL;
 
     setting = config_lookup(&cfg, shape);
     if (!setting)
