@@ -27,7 +27,7 @@ t_config *config_load(int argc, char *argv[])
     }
 
     config_init(&cfg);
-    if (!config_read_file(&cfg, "res/config")) {
+    if (!config_read_file(&cfg, "/usr/share/schlock/config")) {
         return NULL;
     }
 
@@ -42,9 +42,6 @@ t_config *config_load(int argc, char *argv[])
         return NULL;
     conf->svg = strdup(svg);
     config_destroy(&cfg);
-#if 1
-    printf("svg: %s (%d - %d)\n", conf->svg, conf->x, conf->y);
-#endif
 
     return conf;
 }
