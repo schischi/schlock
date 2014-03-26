@@ -34,6 +34,8 @@ int main(int argc, char* argv[])
     int width, height, wWidth, wHeight;
 
     t_config *conf = config_load(argc, argv);
+    if (conf == NULL)
+        fatal("Config file not found\n");
 
     if(!(rsvg_handle = rsvg_handle_new_from_file(conf->svg, NULL)))
         fatal("Unable to load svg\n");
@@ -71,8 +73,10 @@ int main(int argc, char* argv[])
         pid = vfork();
     } while((pid == -1) && (errno == EAGAIN));
 
-    if(!pid)
+    if(!pid) {
         execv(schlock[0], schlock + 1);
+        fatal("Schlock not found\n");
+    }
 
     do {
         XEvent e;
