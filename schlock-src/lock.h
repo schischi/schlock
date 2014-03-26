@@ -21,12 +21,13 @@ struct s_lock {
     char *msg;
     size_t msg_len;
     struct timeval started;
+    int failure;
 };
 struct s_lock typedef t_lock;
 
-t_lock win_create(char *msg);
-char win_getc(t_lock lock, t_buf *buf);
-void win_str(t_lock lock, t_buf *buf);
-
+t_lock *win_create(char *msg);
+char win_getc(t_lock *lock, t_buf *buf);
+void win_str(t_lock *lock, t_buf *buf);
+void win_fail(t_lock *lock);
 
 #endif /* !LOCK_H */

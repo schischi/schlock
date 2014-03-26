@@ -15,4 +15,3 @@ void buf_delete(t_buf *buf)
     free(buf->buf);
     free(buf);
 }
-
