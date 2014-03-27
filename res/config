@@ -7,7 +7,7 @@ hmm =
 
 hmm_rage =
 {
-    svg = "res/hmm_rage.svg"
+    svg = "res/hmm_rage.svg";
     x = 200;
     y = 220;
 };

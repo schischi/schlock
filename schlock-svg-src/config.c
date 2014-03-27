@@ -31,7 +31,7 @@ t_config *config_load(int argc, char *argv[])
         if (!config_read_file(&cfg, "config"))
             if (!config_read_file(&cfg, "~/.schlock/config"))
                 if (!config_read_file(&cfg, "res/config"))
-                return NULL;
+                    return NULL;
 
     setting = config_lookup(&cfg, shape);
     if (!setting)
