@@ -37,10 +37,16 @@ t_lock *win_create(char *msg)
     XFlush(lock->display);
 
     /* Grab input */
-    XGrabPointer(lock->display, lock->win, 0, ButtonPressMask | ButtonReleaseMask
-            | PointerMotionMask, GrabModeSync, GrabModeAsync, lock->win, None,
-            CurrentTime);
-    XGrabKeyboard(lock->display, lock->win, True, GrabModeAsync, GrabModeAsync, CurrentTime);
+    int grab = 0;
+    do {
+        grab = XGrabPointer(lock->display, lock->win, 0,
+                            ButtonPressMask | ButtonReleaseMask
+                            | PointerMotionMask, GrabModeSync, GrabModeAsync,
+                            lock->win, None, CurrentTime);
+        grab |= XGrabKeyboard(lock->display, lock->win, True,
+                GrabModeAsync, GrabModeAsync, CurrentTime);
+        usleep(500);
+    } while (grab);
 
     if (msg) {
         lock->msg = msg;
