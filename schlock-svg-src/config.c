@@ -14,6 +14,7 @@ t_config *config_load(int argc, char *argv[])
     config_setting_t *setting;
     const char *svg;
     char *shape = "hmm";
+    char *path = "/usr/share/schlock/";
 
     int opt;
     while ((opt = getopt(argc, argv, "s:")) != -1) {
@@ -27,11 +28,12 @@ t_config *config_load(int argc, char *argv[])
     }
 
     config_init(&cfg);
-    if (!config_read_file(&cfg, "/usr/share/schlock/config"))
+    if (!config_read_file(&cfg, "/usr/share/schlock/config")) {
         if (!config_read_file(&cfg, "config"))
-            if (!config_read_file(&cfg, "~/.schlock/config"))
-                if (!config_read_file(&cfg, "res/config"))
-                    return NULL;
+            if (!config_read_file(&cfg, "res/config"))
+                return NULL;
+        path = "";
+    }
 
     setting = config_lookup(&cfg, shape);
     if (!setting)
@@ -42,9 +44,9 @@ t_config *config_load(int argc, char *argv[])
         return NULL;
     if (!config_setting_lookup_int(setting, "y", &conf->y))
         return NULL;
-    conf->svg = strdup(svg);
+    asprintf(&(conf->svg), "%s%s", path, svg);
     config_destroy(&cfg);
-
+    printf("Svg is %s\n", conf->svg);
     return conf;
 }
 
